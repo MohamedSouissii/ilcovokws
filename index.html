@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IL COVO – Cigares Lounge</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Playfair+Display:wght@400;600&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Cormorant Garamond',serif;background:#0b0a08;color:#ffffff;overflow-x:hidden}
+
+.age-verification{position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px;
+    background: url('./background.png') no-repeat center center;
+    background-size: cover;
+    background-attachment: scroll; /* Important pour mobile */
+    min-height: 100vh;
+    min-height: 100dvh;}
+.age-verification.hidden{display:none}
+.age-card{background:rgba(0,0,0,0.45);padding:50px 40px;border-radius:15px;max-width:450px;width:100%;margin-right:80px;box-shadow:0 20px 60px rgba(0,0,0,0.5);backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,0.1)}
+.age-question{font-size:32px;font-weight:600;margin-bottom:20px;line-height:1.3;color:#ffffff;font-family:'Playfair Display',serif}
+.age-description{font-size:16px;line-height:1.6;color:#cccccc;margin-bottom:35px;font-family:Arial,sans-serif}
+.age-buttons{display:flex;gap:15px}
+.age-btn{flex:1;padding:18px 30px;font-size:18px;font-weight:600;border:none;border-radius:8px;cursor:pointer;transition:all 0.3s ease;font-family:"Playfair Display",serif}
+.age-btn.under{background:transparent;color:white;border:2px solid rgba(255,255,255,0.6)}
+.age-btn.under:hover{background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.9);transform:translateY(-2px)}
+.age-btn.over{background:#c41e3a;color:#fff;border:2px solid #c41e3a}
+.age-btn.over:hover{background:#e02440;border-color:#e02440;transform:translateY(-2px);box-shadow:0 5px 20px rgba(196,30,58,0.5)}
+
+.main-content{display:none}
+.main-content.visible{display:block}
+.background{position:fixed;inset:0;z-index:-2;background:radial-gradient(circle at 20% 30%, rgba(255,255,255,0.12), transparent 40%),radial-gradient(circle at 80% 60%, rgba(255,255,255,0.10), transparent 45%),linear-gradient(180deg,#0b0a08,#050403);animation:bgMove 12s ease-in-out infinite alternate}
+@keyframes bgMove{0%{filter:brightness(1)}100%{filter:brightness(1.15)}}
+.smoke{position:fixed;inset:0;background:url("https://www.transparenttextures.com/patterns/foggy-birds.png");opacity:0.06;animation:smoke 40s linear infinite;z-index:-1}
+@keyframes smoke{from{background-position:0 0}to{background-position:1000px 1000px}}
+
+.navbar{position:fixed;top:0;width:100%;background:rgba(10,10,10,.9);border-bottom:1px solid rgba(255,255,255,.4);padding:1rem 2rem;z-index:1000;transition:.3s}
+.navbar.scrolled{padding:.6rem 2rem}
+.nav-container{max-width:1200px;margin:auto;display:flex;justify-content:space-between;align-items:center}
+.nav-logo{display:block}
+.nav-logo img{height:50px;width:auto}
+.nav-menu{display:flex;gap:2rem;list-style:none}
+.nav-link{font-family:'Cinzel',serif;text-decoration:none;color:#ffffff}
+.nav-link:hover{color:#ffffff}
+.burger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+.burger span{width:25px;height:2px;background:#ffffff}
+
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:6rem}
+.logo{width:100%;max-width:500px;height:auto}
+.tagline{font-family:'Playfair Display',serif;font-style:italic;margin:1.5rem 0;font-size:1.6rem;color:#ffffff}
+.divider{width:160px;height:3px;margin:2rem auto;background:linear-gradient(90deg,transparent,#ffffff,transparent)}
+.cta{display:inline-block;padding:1rem 3rem;background:linear-gradient(135deg,#ffffff,#ffffff);color:#0b0a08;text-decoration:none;font-family:'Cinzel',serif;letter-spacing:.25em;position:relative}
+.cta::after{content:"";position:absolute;inset:6px;border:1px dashed rgba(0,0,0,.4)}
+
+section{padding:6rem 2rem}
+.container{max-width:1200px;margin:auto}
+.section-title{text-align:center;font-family:'Cinzel',serif;letter-spacing:.35em;margin-bottom:3rem;color:#ffffff}
+
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:3rem}
+.card{background:linear-gradient(135deg,#1b1a17,#0e0e0e);border:3px solid #ffffff;padding:0.5rem;text-align:center;transition:.4s;cursor:pointer}
+.card:hover{transform:translateY(-12px);box-shadow:0 20px 40px rgba(255,255,255,.3)}
+.card-image{position:relative;margin-bottom:1.5rem}
+.card-image img{width:100%;height:340px;object-fit:cover;border:3px solid #ffffff}
+.card-number{position:absolute;bottom:20px;right:20px;font-size:3.5rem;color:#ffffff;font-weight:bold;font-family:'Cinzel',serif;text-shadow:2px 2px 8px rgba(0,0,0,0.8)}
+.card h3{font-family:'Cinzel',serif;text-transform:uppercase;color:#ffffff;font-size:1rem;margin-bottom:0.5rem;padding:0 1.5rem}
+.price{font-family:'Playfair Display',serif;font-size:1.4rem;color:#ffffff;margin:1rem 0;padding:0 1.5rem}
+.whatsapp{display:inline-flex;gap:.5rem;align-items:center;padding:.7rem 2rem;background:#0b0a08;color:white;text-decoration:none;font-family:'Cinzel',serif;border:2px solid #ffffff;transition:.3s;margin-bottom:0.5rem}
+.whatsapp:hover{background:#ffffff;color:#0b0a08}
+
+.contact{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:3rem}
+.box{background:#11100e;padding:2rem;border:1px solid rgba(255,255,255,.4);text-align:center;color:#ffffff}
+footer{text-align:center;padding:2rem;border-top:1px solid #ffffff;color:#ffffff}
+
+/* Modal de détails produit */
+.product-modal{position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.product-modal.active{display:flex}
+.modal-content{background:linear-gradient(135deg,#1b1a17,#0e0e0e);border:3px solid #ffffff;max-width:900px;width:100%;max-height:90vh;overflow-y:auto;position:relative;padding:2rem}
+.modal-close{position:absolute;top:1rem;right:1rem;background:#ffffff;color:#0b0a08;border:none;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:24px;font-weight:bold;transition:.3s}
+.modal-close:hover{background:#c41e3a;color:#ffffff}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2rem}
+.modal-image{width:100%;border:3px solid #ffffff}
+.modal-info h2{font-family:'Cinzel',serif;color:#ffffff;margin-bottom:1rem;font-size:1.8rem}
+.modal-info .price{font-size:2rem;color:#ffffff;margin:1rem 0}
+.info-section{margin:1.5rem 0}
+.info-section h3{font-family:'Cinzel',serif;color:#ffffff;font-size:1.2rem;margin-bottom:0.8rem;border-bottom:2px solid #ffffff;padding-bottom:0.5rem}
+.info-section p,.info-section ul{color:#cccccc;line-height:1.8;font-size:1.1rem;direction:rtl;text-align:right}
+.info-section ul{list-style:none;padding-left:0}
+.info-section ul li{padding:0.3rem 0;padding-left:1.5rem;position:relative}
+.info-section ul li:before{content:"•";position:absolute;left:0;color:#ffffff}
+.modal-order{display:inline-flex;gap:.7rem;align-items:center;padding:1rem 3rem;background:#c41e3a;color:white;text-decoration:none;font-family:'Cinzel',serif;border:2px solid #ffffff;transition:.3s;font-size:1.2rem;margin-top:1rem;cursor:pointer}
+.modal-order:hover{background:#e02440;transform:translateY(-2px)}
+
+@media(max-width:768px){
+    .age-verification{
+        justify-content:center;
+        background-position: 25% center; /* Affiche la partie gauche */
+        background-size:cover;
+        background-attachment:scroll;
+    }
+    
+    .age-card{
+        margin-right:0;
+        padding:35px 25px;
+        max-width:90%;
+    }
+    
+    .age-question{font-size:24px}
+    .age-description{font-size:14px}
+    .age-buttons{flex-direction:column}
+    .age-btn{font-size:16px;padding:15px 20px}
+    
+    .products{
+        grid-template-columns:repeat(2, 1fr);
+        gap:1rem;
+        padding-right:1.5rem;
+        padding-left:0.5rem;
+    }
+    
+    .card{padding:0.3rem}
+    .card-image img{height:180px}
+    .card-number{font-size:2rem;bottom:10px;right:10px}
+    .card h3{font-size:0.75rem;padding:0 0.5rem}
+    .price{font-size:1.1rem;margin:0.5rem 0;padding:0 0.5rem}
+    .whatsapp{padding:0.5rem 1rem;font-size:0.85rem;gap:0.3rem}
+    
+    .nav-menu{position:fixed;top:70px;left:-100%;width:100%;flex-direction:column;background:#0b0a08;padding:2rem;transition:.3s}
+    .nav-menu.active{left:0}
+    .burger{display:flex}
+    .logo{max-width:280px}
+    
+    /* Modal responsive */
+    .modal-content{padding:1.5rem}
+    .modal-grid{grid-template-columns:1fr;gap:1.5rem}
+    .modal-info h2{font-size:1.4rem}
+    .info-section h3{font-size:1.1rem}
+    .info-section p,.info-section ul{font-size:1rem}
+    .modal-order{padding:0.8rem 2rem;font-size:1rem}
+}
+
+@media(max-width:400px){
+    .products{gap:0.8rem}
+    .card-image img{height:150px}
+    .card h3{font-size:0.7rem}
+    .price{font-size:1rem}
+}
+</style>
+</head>
+<body>
+
+<div class="age-verification" id="ageVerification">
+    <div class="age-card">
+        <h2 class="age-question">Are you of legal age?</h2>
+        <p class="age-description">
+            This website contains information about products intended for adults only. Please confirm your age before continuing.
+        </p>
+        <div class="age-buttons">
+            <button class="age-btn under" onclick="ageUnder()">Under the age of (21)</button>
+            <button class="age-btn over" onclick="ageOver()">Of legal age (21+)</button>
+        </div>
+    </div>
+</div>
+
+<div class="main-content" id="mainContent">
+
+<div class="background"></div>
+<div class="smoke"></div>
+
+<nav class="navbar">
+<div class="nav-container">
+<a class="nav-logo" href="#"><img src="./il-covo-white.png" alt="IL COVO"></a>
+<ul class="nav-menu">
+<li><a class="nav-link" href="#">Home</a></li>
+<li><a class="nav-link" href="#cigares">CIGARS</a></li>
+<li><a class="nav-link" href="#contact">CONTACT</a></li>
+</ul>
+<div class="burger"><span></span><span></span><span></span></div>
+</div>
+</nav>
+
+<section class="hero">
+<div>
+<img class="logo" src="./il-covo-white.png" alt="IL COVO">
+<div class="divider"></div>
+<p class="tagline">Exceptional Cigar Lounge</p>
+<a href="#cigares" class="cta">Explore</a>
+</div>
+</section>
+
+<section id="cigares">
+<div class="container">
+<h2 class="section-title">Our Selection of Cigars</h2>
+
+<div class="products">
+
+<div class="card" onclick="showProductDetails('bolivar-belicosos')">
+<div class="card-image">
+<img src="./Bolivar Belicosos Finons.png">
+<span class="card-number">01</span>
+</div>
+<h3>Bolivar Belicosos Finons</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Bolivar Belicosos Finons', '01')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('bolivar-royal')">
+<div class="card-image">
+<img src="./Bolivar Royal Coronas.png">
+<span class="card-number">02</span>
+</div>
+<h3>Bolivar Royal Coronas</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Bolivar Royal Coronas', '02')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('rafael-gonzalez')">
+<div class="card-image">
+<img src="./Rafael Gonzalez Coronas De Lonsdales.png">
+<span class="card-number">03</span>
+</div>
+<h3>Rafael Gonzalez Coronas De Lonsdales</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Rafael Gonzalez Coronas De Lonsdales', '03')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('partagas-d4')">
+<div class="card-image">
+<img src="./Partagas Serie D No.4.png">
+<span class="card-number">04</span>
+</div>
+<h3>Partagas Serie D No.4</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Partagas Serie D No.4', '04')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('partagas-p2')">
+<div class="card-image">
+<img src="./Partagas Serie P No.2.png">
+<span class="card-number">05</span>
+</div>
+<h3>Partagas Serie P No.2</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Partagas Serie P No.2', '05')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('partagas-mille')">
+<div class="card-image">
+<img src="./Partagas Mille Fleurs.png">
+<span class="card-number">06</span>
+</div>
+<h3>Partagas Mille Fleurs</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Partagas Mille Fleurs', '06')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('monte-double')">
+<div class="card-image">
+<img src="./Montecristo Double Edmundo.png">
+<span class="card-number">07</span>
+</div>
+<h3>Montecristo Double Edmundo</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Montecristo Double Edmundo', '07')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('monte-especial')">
+<div class="card-image">
+<img src="./Montecristo Especial No.2.png">
+<span class="card-number">08</span>
+</div>
+<h3>Montecristo Especial No.2</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Montecristo Especial No.2', '08')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('monte-media')">
+<div class="card-image">
+<img src="./Montecristo Media Coronas.png">
+<span class="card-number">09</span>
+</div>
+<h3>Montecristo Media Coronas</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Montecristo Media Coronas', '09')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('monte-no2')">
+<div class="card-image">
+<img src="./Montecristo No. 2.png">
+<span class="card-number">10</span>
+</div>
+<h3>Montecristo No. 2</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Montecristo No. 2', '10')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('monte-no1')">
+<div class="card-image">
+<img src="./Montecristo No. 1.png">
+<span class="card-number">11</span>
+</div>
+<h3>Montecristo No. 1</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Montecristo No. 1', '11')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('monte-no4')">
+<div class="card-image">
+<img src="./montecristo no. 4.png">
+<span class="card-number">12</span>
+</div>
+<h3>Montecristo No. 4</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Montecristo No. 4', '12')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('monte-petit')">
+<div class="card-image">
+<img src="./Montecristo Petit Edmundo.png">
+<span class="card-number">13</span>
+</div>
+<h3>Montecristo Petit Edmundo</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Montecristo Petit Edmundo', '13')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('romeo-mille')">
+<div class="card-image">
+<img src="./Romeo y Julieta Mille Fleurs.png">
+<span class="card-number">14</span>
+</div>
+<h3>Romeo y Julieta Mille Fleurs</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Romeo y Julieta Mille Fleurs', '14')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('romeo-belicosos')">
+<div class="card-image">
+<img src="./Romeo y Julieta Belicosos.png">
+<span class="card-number">15</span>
+</div>
+<h3>Romeo y Julieta Belicosos</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Romeo y Julieta Belicosos', '15')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('romeo-no1')">
+<div class="card-image">
+<img src="./R&J Romeo No. 1.png">
+<span class="card-number">16</span>
+</div>
+<h3>R&J Romeo No. 1</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('R&J Romeo No. 1', '16')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('romeo-no2')">
+<div class="card-image">
+<img src="./R&J Romeo No. 2.png">
+<span class="card-number">17</span>
+</div>
+<h3>R&J Romeo No. 2 A/T</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('R&J Romeo No. 2 A/T', '17')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('romeo-wide')">
+<div class="card-image">
+<img src="./R&J Wide Churchills.png">
+<span class="card-number">18</span>
+</div>
+<h3>R&J Wide Churchills</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('R&J Wide Churchills', '18')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('romeo-short')">
+<div class="card-image">
+<img src="./r&j short churchills.png">
+<span class="card-number">19</span>
+</div>
+<h3>R&J Short Churchills</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('R&J Short Churchills', '19')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('upmann-half')">
+<div class="card-image">
+<img src="./H Upmann Half Coronas.png">
+<span class="card-number">20</span>
+</div>
+<h3>H Upmann Half Coronas</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('H Upmann Half Coronas', '20')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('upmann-pack5')">
+<div class="card-image">
+<img src="./H. Upmann Half Corona pack of 5.png">
+<span class="card-number">21</span>
+</div>
+<h3>H. Upmann Half Corona pack of 5</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('H. Upmann Half Corona pack of 5', '21')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('juan-lopez')">
+<div class="card-image">
+<img src="./Juan López Selección No.2.png">
+<span class="card-number">22</span>
+</div>
+<h3>Juan López Selección No.2</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Juan López Selección No.2', '22')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('hoyo-epicure')">
+<div class="card-image">
+<img src="./Hoyo de Monterrey Epicure No.2.png">
+<span class="card-number">23</span>
+</div>
+<h3>Hoyo de Monterrey Epicure No.2</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Hoyo de Monterrey Epicure No.2', '23')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('hoyo-limitada')">
+<div class="card-image">
+<img src="./HOYO DE MONTERREY MONTERREYES NO. 4 EDICIÓN LIMITADA.png">
+<span class="card-number">24</span>
+</div>
+<h3>HOYO DE MONTERREY MONTERREYES NO. 4 EDICIÓN LIMITADA</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('HOYO DE MONTERREY MONTERREYES NO. 4 EDICIÓN LIMITADA', '24')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('hoyo-rio')">
+<div class="card-image">
+<img src="./Hoyo de Monterrey Le Hoyo de Rio Seco.png">
+<span class="card-number">25</span>
+</div>
+<h3>Hoyo de Monterrey Le Hoyo de Rio Seco</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Hoyo de Monterrey Le Hoyo de Rio Seco', '25')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('hoyo-petit')">
+<div class="card-image">
+<img src="./Hoyo de Monterrey Petit Robustos.png">
+<span class="card-number">26</span>
+</div>
+<h3>Hoyo de Monterrey Petit Robustos</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Hoyo de Monterrey Petit Robustos', '26')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('punch-short')">
+<div class="card-image">
+<img src="./Punch Short De Punch.png">
+<span class="card-number">27</span>
+</div>
+<h3>Punch Short De Punch</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Punch Short De Punch', '27')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('ramon-small')">
+<div class="card-image">
+<img src="./Ramon Allones Small Club Corona.png">
+<span class="card-number">28</span>
+</div>
+<h3>Ramon Allones Small Club Corona</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Ramon Allones Small Club Corona', '28')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('ramon-special')">
+<div class="card-image">
+<img src="./Ramon Allones Specially Selected.png">
+<span class="card-number">29</span>
+</div>
+<h3>Ramon Allones Specially Selected</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Ramon Allones Specially Selected', '29')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('quai-orsay')">
+<div class="card-image">
+<img src="./Quai d'Orsay No. 50.png">
+<span class="card-number">30</span>
+</div>
+<h3>Quai d'Orsay No. 50</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Quai d\'Orsay No. 50', '30')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('flor-cano')">
+<div class="card-image">
+<img src="./La Flor de Cano Robusto ex. Países Bajos.png">
+<span class="card-number">31</span>
+</div>
+<h3>La Flor de Cano Robusto ex. Países Bajos</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('La Flor de Cano Robusto ex. Países Bajos', '31')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('larranaga')">
+<div class="card-image">
+<img src="./Por Larranaga Prometidos ex. Francia.png">
+<span class="card-number">32</span>
+</div>
+<h3>Por Larranaga Prometidos ex. Francia</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Por Larranaga Prometidos ex. Francia', '32')">💬 To order</a>
+</div>
+
+<div class="card" onclick="showProductDetails('protocolo')">
+<div class="card-image">
+<img src="./Protocolo Diplomaticos ex. Rusia.png">
+<span class="card-number">33</span>
+</div>
+<h3>Protocolo Diplomaticos ex. Rusia</h3>
+<p class="price"></p>
+<a class="whatsapp" onclick="event.stopPropagation();order('Protocolo Diplomaticos ex. Rusia', '33')">💬 To order</a>
+</div>
+
+</div>
+</div>
+</section>
+
+<section id="contact">
+<div class="container">
+<h2 class="section-title">Contact</h2>
+<div class="contact">
+<div class="box">📍 Kuwait – Kuwait</div>
+<div class="box">💬 WhatsApp : 96561119777 (24/7)</div>
+</div>
+</div>
+</section>
+
+<footer>
+IL COVO © 2025 – Cigar Lounge
+</footer>
+
+</div>
+
+<!-- Modal de détails produit -->
+<div class="product-modal" id="productModal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeProductDetails()">×</button>
+        <div class="modal-grid">
+            <div>
+                <img id="modalImage" class="modal-image" src="" alt="">
+            </div>
+            <div class="modal-info">
+                <h2 id="modalTitle"></h2>
+                <p class="price" id="modalPrice"></p>
+                <div id="modalDetails"></div>
+                <button class="modal-order" onclick="orderFromModal()">💬 To Order</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Données des produits
+const productsData = {
+    'bolivar-belicosos': {
+        name: 'Bolivar Belicosos Finons',
+        number: '01',
+        price: '285KD',
+        image: './Bolivar Belicosos Finons.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Bolívar',
+        size: 'Belicoso',
+        ringGauge: '52',
+        length: '140 مم',
+        strength: 'قوي (Full-bodied)',
+        smokingTime: '60 – 90 دقيقة تقريباً',
+        flavors: [
+            'نكهات ترابية عميقة',
+            'خشب، جلد، كاكاو داكن',
+            'فلفل وتوابل واضحة في البداية',
+            'مع الوقت تطلع نغمة حلاوة خفيفة متوازنة',
+            'دخان كثيف وطعم غني جداً'
+        ],
+        why: [
+            'من أكثر السيجارات طلباً لعشاق القوة',
+            'توازن جميل بين القوة والعمق',
+            'ممتاز للتخزين (Aging) - كل ما تقعد سنوات يعطي نعومة وطعم أرقى',
+            'يعتبر "قطعة كلاسيكية" لكل عاشق كوبي أصلي'
+        ],
+        forWho: [
+            'للمدخنين المتقدمين أكثر من المبتدئين',
+            'لعشاق السيجار القوي',
+            'بعد وجبة دسمة',
+            'مع قهوة إسبريسو'
+        ],
+        intro: 'واحد من أشهر وأقوى السيجار الكوبي على الإطلاق. هذا النوع بالذات يرفع قيمة أي تشكيلة سيجار.',
+        summary: 'من أكثر السيجارات طلباً لعشاق القوة، يجمع بين القوة والعمق مع نكهات ترابية عميقة وتوابل واضحة.'
+    },
+    'bolivar-royal': {
+        name: 'Bolivar Royal Coronas',
+        number: '02',
+        price: '209KD',
+        image: './Bolivar Royal Coronas.png',
+        origin: 'كوبا 🇨🇺',
+        brand: 'Bolívar',
+        size: 'Robusto',
+        ringGauge: '50',
+        length: '124 مم',
+        strength: 'قوي إلى قوي جداً (Full-bodied)',
+        smokingTime: '45 – 70 دقيقة',
+        flavors: [
+            'تراب كوبي عميق',
+            'خشب قديم وجلد',
+            'كاكاو داكن',
+            'توابل وفلفل واضح بالبداية',
+            'مع الوقت يطلع طعم كريمي خفيف يوازن القوة'
+        ],
+        why: [
+            'يعتبر "ملك" فئة الروبستو عند كثير من عشاق السيجار',
+            'توازن ممتاز بين الحجم، القوة، والتعقيد',
+            'دخان كثيف وطعم ثابت من أول نفخة لآخر السيجار',
+            'من أفضل سيجارات بوليفار للتخزين الطويل (Aging)'
+        ],
+        forWho: [
+            'للمدخنين اللي يحبون السيجار القوي والغني',
+            'غير مفضل للمبتدئين بسبب قوته العالية',
+            'بعد وجبة دسمة',
+            'مع قهوة إسبريسو'
+        ],
+        intro: 'من أرقى وأشهر سيجارات بوليفار، يجمع بين القوة والفخامة. إذا Belicosos Finos هو "الأسطورة"، فـ Royal Coronas هو "الأنيق الملكي".',
+        summary: 'وجوده بأي تشكيلة سيجار يعتبر مستوى عالي جداً. يجمع بين القوة والفخامة مع توازن ممتاز.'
+    },
+    'rafael-gonzalez': {
+        name: 'Rafael Gonzalez Coronas De Lonsdales',
+        number: '03',
+        price: '72KD',
+        image: './Rafael Gonzalez Coronas De Lonsdales.png',
+        origin: 'كوبا 🇨🇺',
+        brand: 'Rafael González',
+        size: 'Lonsdale',
+        ringGauge: '43',
+        length: '155 مم تقريباً',
+        strength: 'خفيف إلى متوسط (Mild – Medium)',
+        smokingTime: '50 – 70 دقيقة',
+        flavors: [
+            'خشب ناعم',
+            'كريمة خفيفة',
+            'لمسة عسل أو بسكويت',
+            'زهور بيضاء أحياناً',
+            'حموضة خفيفة منعشة',
+            'دخان ناعم وسلس جداً'
+        ],
+        why: [
+            'سيجار "راقي وهادئ"',
+            'مثالي للي ما يحب القوة العالية',
+            'ممتاز للتدخين الصباحي أو مع القهوة',
+            'يعطي تجربة كلاسيكية قديمة للسيجار الكوبي'
+        ],
+        forWho: [
+            'للمبتدئين أو للي يحبون السيجار الخفيف والأنيق',
+            'ممتاز كسيجار يومي',
+            'قهوة أمريكانو أو كابتشينو',
+            'شاي أسود أو عصير طبيعي'
+        ],
+        intro: 'من السيجارات الكوبية الكلاسيكية الراقية، نكهته أنعم وأهدأ مقارنة بالبوليفار. اختيار مثالي إذا تبي توازن تشكيلتك بين سيجار قوي وسيجار أنيق خفيف.',
+        summary: 'سيجار راقي وهادئ، مثالي للتدخين الصباحي أو مع القهوة، يعطي تجربة كلاسيكية قديمة للسيجار الكوبي.'
+    },
+    'partagas-d4': {
+        name: 'Partagas Serie D No.4',
+        number: '04',
+        price: '86KD',
+        image: './Partagas Serie D No.4.png',
+        origin: 'كوبا 🇨🇺',
+        brand: 'Partagás',
+        size: 'Robusto',
+        ringGauge: '50',
+        length: '124 مم',
+        strength: 'متوسط إلى قوي (Medium – Full)',
+        smokingTime: '45 – 70 دقيقة',
+        flavors: [
+            'تراب كوبي عميق',
+            'فلفل أسود واضح من أول النفخات',
+            'خشب داكن',
+            'كاكاو وجلد',
+            'مع الوقت يطلع طابع كريمي خفيف يكسر حدّة القوة'
+        ],
+        why: [
+            'من أكثر السيجارات مبيعاً بالعالم',
+            'ثابت الجودة والطعم عبر السنين',
+            'توازن مثالي بين القوة والسلاسة',
+            'يناسب المدخنين الجدد نسبياً والمتقدمين'
+        ],
+        forWho: [
+            'اللي يحب سيجار فيه شخصية وقوة بدون مبالغة',
+            'ممتاز كسيجار يومي فاخر',
+            'بعد الغداء أو العشاء',
+            'قهوة إسبريسو أو شاي أسود ثقيل'
+        ],
+        intro: 'واحد من أشهر وأقوى سيجارات كوبا في فئة الروبستو، وأيقونة حقيقية بعالم السيجار.',
+        summary: 'من أكثر السيجارات طلباً عالمياً، يجمع بين القوة والسلاسة مع توازن مثالي.'
+    },
+    'partagas-p2': {
+        name: 'Partagas Serie P No.2',
+        number: '05',
+        price: '126KD',
+        image: './Partagas Serie P No.2.png',
+        origin: 'كوبا 🇨🇺',
+        brand: 'Partagás',
+        size: 'Torpedo',
+        ringGauge: '52',
+        length: '156 مم',
+        strength: 'قوي إلى قوي جداً (Full-bodied)',
+        smokingTime: '75 – 100 دقيقة',
+        flavors: [
+            'تراب كوبي ثقيل وغني',
+            'فلفل أسود واضح بالبداية',
+            'خشب داكن وجلد',
+            'كاكاو مر',
+            'مع التقدم يطلع طعم كريمي ونكهة حلاوة خفيفة تعطي توازن رهيب'
+        ],
+        why: [
+            'من أفضل 3 Torpedo في كوبا عند أغلب عشاق السيجار',
+            'سيجار ثقيل، فخم، ومليان شخصية',
+            'يتغير طعمه بشكل واضح خلال التدخين',
+            'ممتاز جداً للتخزين الطويل (Aging)'
+        ],
+        forWho: [
+            'للمدخنين المحترفين',
+            'اللي يحب السيجار القوي والمركز',
+            'مو مناسب للمبتدئين',
+            'بعد عشاء ثقيل مع قهوة إسبريسو قوية'
+        ],
+        intro: 'واحد من أقوى وأفخم سيجارات بارتاغاس، ومن أفضل أنواع الـ Torpedo في كوبا.',
+        summary: 'السيجار الملكي الثقيل للمزاج الخاص واللحظات الفاخرة.'
+    },
+    'partagas-mille': {
+        name: 'Partagas Mille Fleurs',
+        number: '06',
+        price: '105KD',
+        image: './Partagas Mille Fleurs.png',
+        origin: 'كوبا 🇨🇺',
+        brand: 'Partagás',
+        size: 'Petit Corona',
+        ringGauge: '42',
+        length: '129 مم',
+        strength: 'متوسط إلى قوي شوي (Medium – Medium Full)',
+        smokingTime: '35 – 50 دقيقة',
+        flavors: [
+            'تراب كوبي واضح',
+            'فلفل خفيف بالبداية',
+            'خشب محمص',
+            'لمسة كاكاو',
+            'مع الوقت يطلع طابع كريمي بسيط يخلي الدخان أنعم'
+        ],
+        why: [
+            'سعره عادة أقل من Serie D و Serie P',
+            'عملي جداً كسيجار يومي',
+            'طعمه صريح وواضح بدون تعقيد مبالغ',
+            'مناسب للي يحب طابع بارتاغاس الكلاسيكي بس بحجم أخف وأقصر'
+        ],
+        forWho: [
+            'للي يحب السيجار الكوبي الأصيل',
+            'للمبتدئين اللي يبون يدخلون عالم بارتاغاس',
+            'كسيجار سريع بعد الغداء أو مع القهوة',
+            'قهوة عربية أو أمريكانو أو شاي أسود'
+        ],
+        intro: 'من أكثر سيجارات بارتاغاس شهرة وانتشار، ويعتبر خيار كلاسيكي يومي بطابع كوبي أصيل.',
+        summary: 'اليومي العملي اللي يعطيك طابع Partagás بأبسط وألذ صورة.'
+    },
+    'monte-double': {
+        name: 'Montecristo Double Edmundo',
+        number: '07',
+        price: '126KD',
+        image: './Montecristo Double Edmundo.png',
+        origin: 'كوبا 🇨🇺',
+        brand: 'Montecristo',
+        size: 'Double Robusto',
+        ringGauge: '55',
+        length: '155 مم',
+        strength: 'متوسط إلى قوي (Medium – Full)',
+        smokingTime: '80 – 110 دقيقة',
+        flavors: [
+            'خشب محمص',
+            'كاكاو وشوكولاتة داكنة',
+            'قهوة',
+            'تراب كوبي ناعم',
+            'لمسة حلاوة خفيفة مع تطور التدخين',
+            'دخان كثيف وكريمي'
+        ],
+        why: [
+            'حجم كبير يعطي دخان كثيف وتجربة طويلة',
+            'متوازن جداً مقارنة بقوته',
+            'فخم ومناسب للجلسات الطويلة',
+            'من أفضل سيجارات Montecristo الحديثة'
+        ],
+        forWho: [
+            'للي يحب السيجار الكبير (Gordo / Double Robusto)',
+            'للمدخنين اللي يحبون القوة المتوسطة مع نكهة غنية',
+            'مناسب حتى للي مو متعود على القوة العالية',
+            'جلسة مسائية طويلة مع قهوة إسبريسو أو حتى تشوكلت داكن'
+        ],
+        intro: 'واحد من أفخم وأقوى سيجارات مونتكريستو بالحجم الكبير. مناسب لعشاق الجلسات الطويلة.',
+        summary: 'حجم كبير يعطي دخان كثيف وتجربة طويلة، متوازن جداً ومناسب للجلسات المسائية الفاخرة.'
+    },
+    'monte-especial': {
+        name: 'Montecristo Especial No.2',
+        number: '08',
+        price: '245KD',
+        image: './Montecristo Especial No.2.png',
+        origin: 'كوبا 🇨🇺',
+        brand: 'Montecristo',
+        size: 'Lonsdale',
+        ringGauge: '38',
+        length: '155 مم',
+        strength: 'متوسط (Medium)',
+        smokingTime: '60 – 80 دقيقة',
+        flavors: [
+            'خشب ناعم',
+            'قهوة خفيفة',
+            'كاكاو',
+            'لمسة عسل أو سكر بني',
+            'تراب كوبي راقي',
+            'دخان ناعم وأنيق جداً'
+        ],
+        why: [
+            'سيجار راقي "Old School"',
+            'يعطي تجربة تذوق نظيفة وواضحة للنكهات',
+            'مثالي للي يحب السيجار النحيف والمتوازن',
+            'مختلف تماماً عن الدبل روبستو أو التوربيدو الثقيلة'
+        ],
+        forWho: [
+            'لعشاق الأناقة والكلاسيك',
+            'للي يفضلون النكهة على القوة',
+            'ممتاز لجلسات هادئة راقية',
+            'العصر أو المساء الهادئ مع قهوة أمريكانو أو شاي أسود'
+        ],
+        intro: 'من أرقى وأفخم سيجارات مونتكريستو، ويُعتبر قطعة كلاسيكية لعشاق السيجار الطويل والرفيع.',
+        summary: 'سيجار راقي يعطي تجربة تذوق نظيفة وواضحة، مثالي لجلسات هادئة راقية.'
+    },
+    'monte-media': {
+        name: 'Montecristo Media Coronas',
+        number: '09',
+        price: '133KD',
+        image: './Montecristo Media Coronas.png',
+        origin: 'كوبا 🇨🇺',
+        brand: 'Montecristo',
+        size: 'Petit Corona',
+        ringGauge: '44',
+        length: '129 مم',
+        strength: 'متوسط (Medium)',
+        smokingTime: '35 – 50 دقيقة',
+        flavors: [
+            'كاكاو واضح (نكهة مونتكريستو المعروفة)',
+            'قهوة',
+            'خشب ناعم',
+            'تراب كوبي متوازن',
+            'لمسة حلاوة خفيفة في النهاية',
+            'دخان كريمي وناعم'
+        ],
+        why: [
+            'يعطي تجربة مونتكريستو الكاملة بحجم أقصر',
+            'عملي جداً لجلسات قصيرة',
+            'متوازن، لا قوي زيادة ولا خفيف زيادة',
+            'من أكثر الأنواع مبيعاً وانتشاراً'
+        ],
+        forWho: [
+            'للمبتدئين والمتوسطين',
+            'للي يحبون السيجار اليومي',
+            'ممتاز بعد الغداء أو مع قهوة العصر',
+            'قهوة عربية أو أمريكانو أو كابتشينو أو شاي أسود'
+        ],
+        intro: 'من أجمل وأشهر السيجارات الصغيرة عند مونتكريستو، يعطيك طعم الماركة الكلاسيكي بحجم عملي وسريع.',
+        summary: 'يعطي تجربة مونتكريستو الكاملة بحجم أقصر، عملي جداً ومتوازن للاستخدام اليومي.'
+    },
+    'monte-no2': {
+        name: 'Montecristo No. 2',
+        number: '10',
+        price: '327KD',
+        image: './Montecristo No. 2.png',
+        origin: 'كوبا 🇨🇺',
+        brand: 'Montecristo',
+        size: 'Torpedo (Piramide)',
+        ringGauge: '52',
+        length: '156 مم',
+        strength: 'متوسط إلى قوي (Medium – Full)',
+        smokingTime: '75 – 100 دقيقة',
+        flavors: [
+            'كاكاو وشوكولاتة داكنة',
+            'قهوة',
+            'خشب محمص',
+            'تراب كوبي نظيف',
+            'فلفل خفيف بالبداية',
+            'مع الوقت تطلع حلاوة راقية جداً'
+        ],
+        why: [
+            'أكثر سيجار شهرة بتاريخ هافانا',
+            'توازن مثالي بين القوة والنعومة',
+            'ثابت الجودة عبر السنين',
+            'يناسب أغلب الأذواق من المتوسط إلى المحترف'
+        ],
+        forWho: [
+            'أول تجربة Torpedo تكون غالباً No.2',
+            'للي يبغى سيجار فخم مضمون',
+            'يصلح هدية راقية جداً',
+            'جلسة مسائية راقية مع قهوة إسبريسو'
+        ],
+        intro: 'أسطورة السيجار الكوبي وأشهر توربيدو في العالم بدون مبالغة.',
+        summary: 'أسطورة حقيقية، توازن مثالي بين القوة والنعومة، ويناسب أغلب الأذواق.'
+    },
+    'monte-no1': {
+        name: 'Montecristo No. 1',
+        number: '11',
+        price: '248KD',
+        image: './Montecristo No. 1.png',
+        origin: 'كوبا 🇨🇺',
+        brand: 'Montecristo',
+        size: 'Lonsdale',
+        ringGauge: '42',
+        length: '165 مم تقريباً',
+        strength: 'متوسطة',
+        smokingTime: '60 – 90 دقيقة',
+        flavors: [
+            'بداية ناعمة مع نكهات خشب الأرز',
+            'يتطور إلى كاكاو وقهوة خفيفة',
+            'لمسة عسل وفانيلا خفيفة',
+            'متوازن جداً وأنيق، مو ثقيل ولا حاد'
+        ],
+        why: [
+            'من أقدم وأشهر مقاسات مونت كريستو',
+            'مناسب للمدخن المبتدئ والمحترف',
+            'يعطي تجربة كلاسيكية كوبية راقية',
+            'ممتاز للتدخين المسائي الهادئ'
+        ],
+        forWho: [
+            'بعد العشاء',
+            'مع قهوة الإسبريسو',
+            'القهوة العربية',
+            'شاي أسود'
+        ],
+        intro: 'واحد من أرقى وأشهر سيجار مونت كريستو الكوبية، ويعتبر خيار كلاسيكي لعشاق السيجار الفاخر.',
+        summary: 'تجربة كلاسيكية كوبية راقية: Elegant – Balanced – Timeless'
+    },
+    'monte-no4': {
+        name: 'Montecristo No. 4',
+        number: '12',
+        price: '180KD',
+        image: './montecristo no. 4.png',
+        origin: 'كوبا 🇨🇺',
+        brand: 'Montecristo',
+        size: 'Mareva',
+        ringGauge: '42',
+        length: '129 مم',
+        strength: 'متوسطة',
+        smokingTime: '35 – 50 دقيقة',
+        flavors: [
+            'بداية ناعمة مع خشب الأرز',
+            'نكهات كاكاو وقهوة واضحة',
+            'لمسة توابل خفيفة',
+            'متوازن وسلس وسهل التدخين'
+        ],
+        why: [
+            'مناسب لكل الأوقات',
+            'عملي وسريع مقارنة بالـ No.1',
+            'طعمه ثابت وجودته عالية',
+            'ممتاز للمبتدئ والمحترف'
+        ],
+        forWho: [
+            'السيجار اليومي المثالي',
+            'للي يبي نكهة كوبية أصيلة بوقت أقصر'
+        ],
+        intro: 'يعتبر أكثر سيجار مونت كريستو مبيعاً في العالم، وأيقونة حقيقية في عالم السيجار الكوبي.',
+        summary: 'Classic – Rich – Reliable. السيجار اليومي المثالي بنكهة كوبية أصيلة.'
+    },
+    'monte-petit': {
+        name: 'Montecristo Petit Edmundo',
+        number: '13',
+        price: '94KD',
+        image: './Montecristo Petit Edmundo.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Montecristo',
+        size: 'Petit Robusto',
+        ringGauge: '52',
+        length: '110 مم',
+        strength: 'متوسطة إلى قوية (Medium – Full)',
+        smokingTime: '40 – 55 دقيقة تقريباً',
+        flavors: [
+            'كاكاو وشوكولاتة داكنة واضحة',
+            'خشب أرز غني',
+            'قهوة محمصة',
+            'لمسة فلفل خفيفة بالبداية',
+            'حلاوة خفيفة مع التقدم',
+            'دخان كثيف وطعم عميق ومركز'
+        ],
+        why: [
+            'يعطي تجربة Montecristo الكاملة بوقت أقصر',
+            'مناسب للي يحب النكهة الغنية بدون انتظار طويل',
+            'توازن ممتاز بين القوة والنعومة',
+            'محبوب جداً عند عشاق مونت كريستو'
+        ],
+        forWho: [
+            'بعد وجبة دسمة',
+            'مع قهوة إسبريسو',
+            'جلسات مسائية راقية'
+        ],
+        intro: 'واحد من أكثر سيجارات مونت كريستو توازناً وقوة بحجم عملي، يجمع بين الغنى المعروف للماركة وبين مدة تدخين أقصر.',
+        summary: 'القوة الأنيقة المختصرة: غني، فخم، وتجربة مونت كريستو كاملة بحجم عملي.'
+    },
+    'romeo-mille': {
+        name: 'Romeo y Julieta Mille Fleurs',
+        number: '14',
+        price: '105KD',
+        image: './Romeo y Julieta Mille Fleurs.png',
+        origin: 'كوبا 🇨🇺',
+        brand: 'Romeo y Julieta',
+        size: 'Petit Corona',
+        ringGauge: '42',
+        length: '129 مم',
+        strength: 'خفيف إلى متوسط (Mild – Medium)',
+        smokingTime: '35 – 50 دقيقة',
+        flavors: [
+            'خشب ناعم',
+            'زهور خفيفة',
+            'كريمة',
+            'لمسة عسل أو بسكويت',
+            'حموضة خفيفة منعشة',
+            'دخان ناعم وسلس جداً'
+        ],
+        why: [
+            'سيجار أنيق و"نظيف" بالطعم',
+            'مناسب جداً للتدخين الصباحي',
+            'ممتاز للي ما يحب القوة العالية'
+        ],
+        forWho: [
+            'للمبتدئين وللي يحبون السيجار الخفيف والراقي',
+            'كسيجار يومي بدون تعب',
+            'قهوة أمريكانو أو كابتشينو',
+            'شاي و حتى مع عصير طبيعي'
+        ],
+        intro: 'سيجار كلاسيكي أنيق، معروف بنعومته وطابعه المتوازن، ومحبوب جداً كسيجار يومي.',
+        summary: 'سيجار أنيق ونظيف بالطعم، مناسب جداً للتدخين الصباحي.'
+    },
+    'romeo-belicosos': {
+        name: 'Romeo y Julieta Belicosos',
+        number: '15',
+        price: '86KD',
+        image: './Romeo y Julieta Belicosos.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Romeo y Julieta',
+        size: 'Belicoso',
+        ringGauge: '52',
+        length: '140 مم',
+        strength: 'متوسطة (Medium)',
+        smokingTime: '60 – 75 دقيقة تقريباً',
+        flavors: [
+            'خشب أرز واضح وكلاسيكي',
+            'كريمية ناعمة تعطي سلاسة في التدخين',
+            'لمسة فلفل خفيفة بالبداية',
+            'نغمات عسل وبسكويت مع التقدم',
+            'دخان ناعم وطعم متوازن جداً بدون حدة'
+        ],
+        why: [
+            'يعكس هوية Romeo y Julieta الراقية والكلاسيكية',
+            'مناسب للي يحب النكهة المتوازنة أكثر من القوة',
+            'شكل الـ Belicoso يعطي تركيز أعلى للنكهة',
+            'ممتاز للمبتدئين والمتوسطين وحتى المحترفين'
+        ],
+        forWho: [
+            'بعد العشاء',
+            'مع قهوة إسبريسو أو كابتشينو'
+        ],
+        intro: 'واحد من أرقى وأشهر سيجارات روميو إي جوليتا، يجمع بين الأناقة والطابع الكلاسيكي بنكهة ناعمة ومتوازنة.',
+        summary: 'خيار مثالي للي يحب سيجار كوبي راقي بدون قوة مفرطة.'
+    },
+    'romeo-no1': {
+        name: 'Romeo y Julieta Romeo No. 1',
+        number: '16',
+        price: '72KD',
+        image: './R&J Romeo No. 1.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Romeo y Julieta',
+        size: 'Parejo',
+        ringGauge: '40 تقريباً',
+        length: '140 مم',
+        strength: 'خفيف إلى متوسط (Light – Medium)',
+        smokingTime: '35 – 50 دقيقة تقريباً',
+        flavors: [
+            'خشب أرز ناعم وواضح',
+            'كريمية خفيفة ومريحة',
+            'نغمات زهرية بسيطة',
+            'لمسة حلاوة خفيفة مع تقدم التدخين',
+            'دخان خفيف وأنيق جداً'
+        ],
+        why: [
+            'من أفضل الخيارات للمبتدئين بعالم السيجار الكوبي',
+            'مثالي للتدخين الصباحي أو السريع',
+            'يعكس الطابع الكلاسيكي الهادئ لعلامة Romeo y Julieta',
+            'سلس جداً وما يسبب إرهاق للحلق'
+        ],
+        forWho: [
+            'الصباح مع قهوة أمريكية',
+            'بعد الغداء الخفيف',
+            'أثناء جلسة هادئة أو اجتماعات بسيطة'
+        ],
+        intro: 'واحد من أكثر سيجارات Romeo y Julieta نعومة وأناقة، كلاسيكي وخفيف على المزاج.',
+        summary: 'يعطي إحساس الرفاهية الهادئة بدون قوة زائدة.'
+    },
+    'romeo-no2': {
+        name: 'Romeo y Julieta Romeo No. 2 A/T',
+        number: '17',
+        price: '77KD',
+        image: './R&J Romeo No. 2.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Romeo y Julieta',
+        size: 'Parejo',
+        ringGauge: '42 تقريباً',
+        length: '129 مم',
+        strength: 'خفيف إلى متوسط (Light – Medium)',
+        smokingTime: '30 – 45 دقيقة تقريباً',
+        flavors: [
+            'خشب أرز ناعم',
+            'كريمية خفيفة ومريحة',
+            'لمسة زهرية بسيطة',
+            'حلاوة خفيفة مع تقدم التدخين',
+            'دخان نظيف وسلس جداً'
+        ],
+        why: [
+            'الأنبوب الألمنيوم يحافظ على السيجار من الرطوبة والكسر',
+            'مثالي للتنقل والسفر',
+            'سيجار أنيق للتقديم كهديّة فاخرة',
+            'سهل التدخين ومناسب للمبتدئين',
+            'يعكس الطابع الكلاسيكي الراقي لـ Romeo y Julieta'
+        ],
+        forWho: [
+            'الصباح مع قهوة أمريكية',
+            'بين الاجتماعات',
+            'جلسات خفيفة وسريعة',
+            'كتدخين راقٍ بدون التزام وقت طويل'
+        ],
+        intro: 'من أكثر سيجارات Romeo y Julieta العملية والأنيقة، يجمع بين النعومة الكلاسيكية والحماية الفاخرة بفضل الأنبوب الألمنيوم.',
+        summary: 'مثالي للي يحب السيجار الخفيف المتوازن ويهتم بالشكل الراقي وسهولة الحمل.'
+    },
+    'romeo-wide': {
+        name: 'Romeo y Julieta Wide Churchills',
+        number: '18',
+        price: '126KD',
+        image: './R&J Wide Churchills.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Romeo y Julieta',
+        size: 'Parejo',
+        ringGauge: '55',
+        length: '130 مم',
+        strength: 'متوسطة (Medium)',
+        smokingTime: '75 – 100 دقيقة تقريباً',
+        flavors: [
+            'خشب أرز ناعم وكلاسيكي',
+            'كريمية واضحة تعطي نعومة عالية',
+            'لمسات فانيلا خفيفة',
+            'نغمة عسل وبسكويت مع الوقت',
+            'دخان كثيف، ناعم، ومخملي'
+        ],
+        why: [
+            'واحد من أكثر سيجارات Romeo y Julieta فخامة',
+            'الرينج الكبير يعطي دخان أغنى ونكهة أعمق',
+            'مناسب للي يحب التدخين الطويل والهادئ',
+            'توازن ممتاز بين النعومة والغنى'
+        ],
+        forWho: [
+            'جلسات المساء الطويلة',
+            'بعد عشاء راقي',
+            'مع قهوة إسبريسو أو لاتيه'
+        ],
+        intro: 'من أفخم وأشهر سيجارات Romeo y Julieta الحديثة، يجمع بين الحجم الكبير والطابع الناعم المتوازن.',
+        summary: 'سيجار رفاهي بامتياز، يعطي تجربة طويلة وغنية بدون ما تكون القوة متعبة.'
+    },
+    'romeo-short': {
+        name: 'Romeo y Julieta Short Churchills',
+        number: '19',
+        price: '94KD',
+        image: './r&j short churchills.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Romeo y Julieta',
+        size: 'Robusto',
+        ringGauge: '50',
+        length: '124 مم',
+        strength: 'متوسطة (Medium)',
+        smokingTime: '45 – 60 دقيقة تقريباً',
+        flavors: [
+            'خشب أرز واضح',
+            'كريمية غنية',
+            'نغمات فانيلا خفيفة',
+            'لمسة توابل ناعمة',
+            'حلاوة خفيفة تشبه البسكويت بالعسل',
+            'دخان كثيف ومتوازن جداً'
+        ],
+        why: [
+            'من أكثر سيجارات Romeo y Julieta مبيعاً عالمياً',
+            'يعطي تجربة غنية بوقت أقصر',
+            'توازن مثالي بين النعومة والقوة',
+            'مناسب للمبتدئين والمتقدمين'
+        ],
+        forWho: [
+            'بعد الغداء أو العشاء',
+            'مع قهوة إسبريسو',
+            'جلسات مسائية قصيرة لكن راقية'
+        ],
+        intro: 'واحد من أشهر وأنجح سيجارات Romeo y Julieta على الإطلاق، ويعتبر أيقونة حقيقية في عالم السيجار الكوبي.',
+        summary: 'النسخة المكثفة من شخصية روميو الكلاسيكية، يجمع بين الحجم العملي والطعم الغني.'
+    },
+    'upmann-half': {
+        name: 'H. Upmann Half Coronas',
+        number: '20',
+        price: '90KD',
+        image: './H Upmann Half Coronas.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'H. Upmann',
+        size: 'Petit Corona',
+        ringGauge: '44',
+        length: '90 مم',
+        strength: 'خفيف إلى متوسط (Light – Medium)',
+        smokingTime: '20 – 30 دقيقة تقريباً',
+        flavors: [
+            'خشب ناعم وأرز واضح',
+            'نغمات ترابية خفيفة',
+            'كريمية بسيطة ومريحة',
+            'لمسة مكسرات خفيفة',
+            'حلاوة ناعمة بنهاية التدخين',
+            'دخان متوازن وأنيق جداً'
+        ],
+        why: [
+            'مثالي للتدخين السريع بدون استعجال',
+            'من أفضل السيجارات القصيرة في كوبا',
+            'يحافظ على هوية H. Upmann الكلاسيكية الراقية',
+            'مناسب جداً للمبتدئين وللمحترفين'
+        ],
+        forWho: [
+            'استراحة قصيرة',
+            'مع قهوة الصباح',
+            'بعد وجبة خفيفة',
+            'للجلسات السريعة الراقية'
+        ],
+        intro: 'واحد من أكثر السيجارات الكوبية العملية والأنيقة، صغير بالحجم لكن كبير بالطعم.',
+        summary: 'مثالي للي يبي تجربة كوبي أصلية بوقت قصير بدون التنازل عن الجودة.'
+    },
+    'upmann-pack5': {
+        name: 'H. Upmann Half Corona Pack of 5',
+        number: '21',
+        price: '45KD',
+        image: './H. Upmann Half Corona Pack of 5.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'H. Upmann',
+        size: 'Petit Corona',
+        ringGauge: '44',
+        length: '90 مم',
+        strength: 'خفيف إلى متوسط (Light – Medium)',
+        smokingTime: '20 – 30 دقيقة تقريباً',
+        flavors: [
+            'خشب وأرز ناعم',
+            'نغمات ترابية خفيفة',
+            'كريمية بسيطة ومريحة',
+            'لمسة مكسرات خفيفة',
+            'حلاوة ناعمة بنهاية التدخين',
+            'دخان نظيف ومتوازن'
+        ],
+        why: [
+            'تغليف فاخر وعملي يحافظ على السيجار',
+            'مثالي كهدية راقية وسريعة',
+            'سهل الحمل للسفر أو التنقل',
+            'نفس جودة العلبة الكبيرة لكن بحجم أصغر'
+        ],
+        forWho: [
+            'استراحة قصيرة',
+            'مع قهوة الصباح',
+            'بين المواعيد',
+            'جلسات خفيفة وسريعة'
+        ],
+        intro: 'نفس السيجار الكلاسيكي المعروف من H. Upmann لكن بتغليف عملي وأنيق، مثالي كهدية راقية أو للاستخدام اليومي.',
+        summary: 'الفخامة العملية: سيجار كوبي أصلي بطابع أنيق وسهل الاستخدام اليومي.'
+    },
+    'juan-lopez': {
+        name: 'Juan López Selección No. 2',
+        number: '22',
+        price: '84KD',
+        image: './Juan López Selección No.2.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Juan López',
+        size: 'Robusto',
+        ringGauge: '50',
+        length: '124 مم',
+        strength: 'متوسطة (Medium)',
+        smokingTime: '45 – 60 دقيقة تقريباً',
+        flavors: [
+            'خشب أرز واضح',
+            'نغمات ترابية دافئة',
+            'لمسة توابل خفيفة',
+            'كريمية ناعمة مع التقدم',
+            'حلاوة خفيفة تشبه العسل',
+            'دخان غني ومتوازن'
+        ],
+        why: [
+            'من أفضل السيجارات من حيث القيمة مقابل الجودة',
+            'طعم كوبي أصيل وكلاسيكي',
+            'مناسب للمبتدئين والمتقدمين',
+            'أقل شهرة من الماركات الكبيرة لكنه عالي المستوى'
+        ],
+        forWho: [
+            'بعد الغداء أو العشاء',
+            'مع قهوة إسبريسو',
+            'جلسات هادئة راقية'
+        ],
+        intro: 'واحد من أكثر السيجارات الكوبية تقديراً عند عشاق الذوق الكلاسيكي المتوازن، وسيجار معروف بقيمته العالية مقابل الجودة.',
+        summary: 'الأناقة الهادئة: بسيط بالاسم، غني بالطعم، وراقي بالتجربة.'
+    },
+    'hoyo-epicure': {
+        name: 'Hoyo de Monterrey Epicure No. 2',
+        number: '23',
+        price: '94KD',
+        image: './Hoyo de Monterrey Epicure No.2.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Hoyo de Monterrey',
+        size: 'Robusto',
+        ringGauge: '50',
+        length: '124 مم',
+        strength: 'خفيف إلى متوسط (Light – Medium)',
+        smokingTime: '45 – 60 دقيقة تقريباً',
+        flavors: [
+            'كريمية واضحة ومخمليّة',
+            'خشب أرز ناعم',
+            'نغمات عسل وفانيلا',
+            'لمسة زهرية خفيفة',
+            'حلاوة راقية متوازنة',
+            'دخان ناعم جداً وسلس'
+        ],
+        why: [
+            'من أكثر السيجارات قبولاً عند جميع الأذواق',
+            'ممتاز للمبتدئين والمحترفين',
+            'تجربة فاخرة وراقية بدون تعب أو ثقل',
+            'طعم أنيق جداً ومثالي للجلسات الهادئة'
+        ],
+        forWho: [
+            'الصباح مع قهوة',
+            'بعد الغداء الخفيف',
+            'جلسات مسائية راقية',
+            'مع قهوة لاتيه أو كابتشينو'
+        ],
+        intro: 'واحد من أشهر وأجمل السيجارات الكوبية على الإطلاق، ويعتبر من أكثر الأنواع مبيعاً عالمياً.',
+        summary: 'النعومة الفاخرة: راقٍ، مريح، وكلاسيكي بامتياز.'
+    },
+    'hoyo-limitada': {
+        name: 'Hoyo de Monterrey Monterreyes No.4 Edición Limitada',
+        number: '24',
+        price: '180KD',
+        image: './HOYO DE MONTERREY MONTERREYES NO. 4 EDICIÓN LIMITADA.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Hoyo de Monterrey',
+        size: 'Parejo',
+        ringGauge: '55 تقريباً',
+        length: '145 مم تقريباً',
+        strength: 'متوسطة (Medium)',
+        smokingTime: '90 – 120 دقيقة تقريباً',
+        flavors: [
+            'كريمية غنية جداً',
+            'خشب أرز فاخر',
+            'نغمات عسل وفانيلا واضحة',
+            'لمسة مكسرات ناعمة',
+            'حلاوة راقية ومتوازنة',
+            'دخان كثيف، مخملي، وناعم بشكل استثنائي'
+        ],
+        why: [
+            'من الإصدارات المحدودة النادرة في عالم السيجار الكوبي',
+            'أوراق تبغ مختارة ومعتقة لفترة أطول من العادة',
+            'مناسب لهواة الاقتناء والتخزين الطويل (Aging)',
+            'قابل للتطور بشكل جميل مع السنوات'
+        ],
+        forWho: [
+            'جلسات المساء الطويلة',
+            'المناسبات الخاصة جداً',
+            'عندما تريد تجربة سيجار استثنائية بكل معنى الكلمة'
+        ],
+        intro: 'واحد من أندر وأفخم إصدارات Hoyo de Monterrey، سيجار مخصص لعشاق التميز والاقتناء.',
+        summary: 'قمة الفخامة الكوبية: نادر، راقٍ، وتجربة لا تتكرر كثيراً.'
+    },
+    'hoyo-rio': {
+        name: 'Hoyo de Monterrey Le Hoyo de Río Seco',
+        number: '25',
+        price: '126KD',
+        image: './Hoyo de Monterrey Le Hoyo de Rio Seco.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Hoyo de Monterrey',
+        size: 'Robusto Extra',
+        ringGauge: '56',
+        length: '140 مم',
+        strength: 'متوسطة (Medium)',
+        smokingTime: '75 – 95 دقيقة تقريباً',
+        flavors: [
+            'كريمية غنية وواضحة',
+            'خشب أرز فاخر',
+            'نغمات مكسرات محمصة',
+            'لمسة عسل وفانيلا',
+            'توابل ناعمة جداً بدون حدة',
+            'دخان كثيف، مخملي، ومشبع بالنكهة'
+        ],
+        why: [
+            'أكبر سيجار ضمن سلسلة Le Hoyo الكلاسيكية',
+            'يجمع بين النعومة والحجم الكبير والنكهة العميقة',
+            'مناسب للي يحب الدخان الكثيف مع طابع راقي',
+            'تجربة فاخرة جداً بدون قوة متعبة'
+        ],
+        forWho: [
+            'جلسات المساء الطويلة',
+            'بعد عشاء فاخر',
+            'مع قهوة إسبريسو'
+        ],
+        intro: 'واحد من أكثر سيجارات Hoyo de Monterrey تميزاً وفخامة، ويعتبر نقلة نوعية بالماركة من ناحية الحجم والغنى بالنكهة.',
+        summary: 'الفخامة الهادئة المكثفة: كبير بالحجم، غني بالطعم، وناعم بالتجربة.'
+    },
+    'hoyo-petit': {
+        name: 'Hoyo de Monterrey Petit Robustos',
+        number: '26',
+        price: '84KD',
+        image: './Hoyo de Monterrey Petit Robustos.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Hoyo de Monterrey',
+        size: 'Petit Robusto',
+        ringGauge: '50',
+        length: '102 مم',
+        strength: 'خفيف إلى متوسط (Light – Medium)',
+        smokingTime: '30 – 40 دقيقة تقريباً',
+        flavors: [
+            'كريمية واضحة ومخمليّة',
+            'خشب أرز ناعم',
+            'نغمات مكسرات خفيفة',
+            'لمسة عسل وفانيلا',
+            'توابل ناعمة جداً في الخلفية',
+            'دخان كثيف نسبةً لحجمه ومشبع بالنكهة'
+        ],
+        why: [
+            'يعطي تجربة كاملة بوقت قصير',
+            'مثالي للي ما عنده وقت طويل للتدخين',
+            'يحافظ على هوية Hoyo الناعمة والراقية',
+            'مناسب للمبتدئين والمحترفين'
+        ],
+        forWho: [
+            'استراحة قصيرة',
+            'بعد الغداء',
+            'مع قهوة إسبريسو',
+            'جلسات سريعة لكن فخمة'
+        ],
+        intro: 'سيجار صغير بالحجم، كبير بالطعم، ويعتبر من أنجح الإضافات الحديثة لعلامة Hoyo de Monterrey.',
+        summary: 'الفخامة المختصرة: طعم غني، دخان ناعم، وتجربة راقية بزمن أقل.'
+    },
+    'punch-short': {
+        name: 'Punch Short de Punch',
+        number: '27',
+        price: '94KD',
+        image: './Punch Short de Punch.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Punch',
+        size: 'Petit Robusto',
+        ringGauge: '50',
+        length: '120 مم تقريباً',
+        strength: 'متوسطة إلى قوية (Medium – Full)',
+        smokingTime: '35 – 50 دقيقة تقريباً',
+        flavors: [
+            'نكهات ترابية واضحة',
+            'خشب داكن',
+            'لمسة كاكاو وقهوة',
+            'توابل وفلفل خفيف في البداية',
+            'نغمة حلاوة خفيفة بالنهاية',
+            'دخان كثيف وطعم غني ومباشر'
+        ],
+        why: [
+            'يعطي تجربة Punch كاملة بحجم أقصر',
+            'مناسب للي يحب الطابع القوي المركّز',
+            'اختيار ممتاز لعشاق السيجار الكوبي الكلاسيكي',
+            'قيمة عالية مقابل السعر'
+        ],
+        forWho: [
+            'بعد وجبة دسمة',
+            'مع قهوة إسبريسو قوية',
+            'جلسات مسائية قصيرة لكن عميقة'
+        ],
+        intro: 'سيجار صغير بالحجم لكن بطابع قوي وواضح، ويعتبر من أفضل الخيارات لعشاق Punch اللي يحبون النكهة العميقة بوقت قصير.',
+        summary: 'القوة المختصرة: شخصية واضحة، نكهة غنية، وتجربة Punch أصلية بزمن أقل.'
+    },
+    'ramon-small': {
+        name: 'Ramon Allones Small Club Corona',
+        number: '28',
+        price: '105KD',
+        image: './Ramon Allones Small Club Corona.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Ramon Allones',
+        size: 'Petit Corona',
+        ringGauge: '42',
+        length: '110 مم',
+        strength: 'متوسطة إلى قوية (Medium – Full)',
+        smokingTime: '25 – 35 دقيقة تقريباً',
+        flavors: [
+            'نكهات ترابية واضحة',
+            'خشب داكن',
+            'لمسة كاكاو',
+            'فلفل وتوابل خفيفة بالبداية',
+            'حلاوة بسيطة مع التقدم',
+            'دخان غني ومركز'
+        ],
+        why: [
+            'من أقوى السيجارات القصيرة في كوبا',
+            'يعطي تجربة كاملة بزمن قصير',
+            'مناسب للمدخنين المتقدمين',
+            'قيمة عالية مقابل الحجم والسعر'
+        ],
+        forWho: [
+            'بعد وجبة دسمة',
+            'مع قهوة سوداء قوية',
+            'جلسات سريعة لكنها عميقة'
+        ],
+        intro: 'سيجار كلاسيكي جداً لعشاق الطابع الكوبي القوي، صغير بالحجم لكن مليان شخصية وقوة.',
+        summary: 'القوة المكثفة: حجم صغير، شخصية كبيرة، وتجربة كوبيّة أصيلة.'
+    },
+    'ramon-special': {
+        name: 'Ramon Allones Specially Selected',
+        number: '29',
+        price: '94KD',
+        image: './Ramon Allones Specially Selected.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Ramon Allones',
+        size: 'Robusto',
+        ringGauge: '50',
+        length: '124 مم',
+        strength: 'متوسطة إلى قوية (Medium – Full)',
+        smokingTime: '50 – 65 دقيقة تقريباً',
+        flavors: [
+            'نكهات ترابية غنية وواضحة',
+            'خشب داكن وأرز',
+            'كاكاو وشوكولاتة داكنة',
+            'لمسة توابل وفلفل بالبداية',
+            'حلاوة خفيفة مع التقدم',
+            'دخان كثيف وطعم عميق ومركز'
+        ],
+        why: [
+            'من أقوى وأغنى أنواع الـ Robusto في كوبا',
+            'مفضل عند عشاق السيجار الثقيل بالنكهة',
+            'يعطي تجربة كوبيّة أصيلة بكل تفاصيلها',
+            'ممتاز للتخزين (Aging) وتطوره مع الوقت يكون رائع'
+        ],
+        forWho: [
+            'بعد وجبة دسمة',
+            'مع قهوة إسبريسو قوية',
+            'جلسات مسائية لمحبي السيجار العميق'
+        ],
+        intro: 'واحد من أشهر وأقوى سيجارات Ramon Allones، ويُعتبر أيقونة حقيقية لعشاق النكهة الكوبية الغنية والعميقة.',
+        summary: 'القوة الكلاسيكية الكوبية: جريء، غني، وصاحب حضور قوي من أول سحبة إلى آخرها.'
+    },
+    'quai-orsay': {
+        name: 'Quai d\'Orsay No. 50',
+        number: '30',
+        price: '84KD',
+        image: "./Quai d'Orsay No. 50.png",
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Quai d\'Orsay',
+        size: 'Robusto',
+        ringGauge: '50',
+        length: '110 مم تقريباً',
+        strength: 'خفيف إلى متوسط (Light – Medium)',
+        smokingTime: '40 – 55 دقيقة تقريباً',
+        flavors: [
+            'كريمية ناعمة وواضحة',
+            'خشب أرز خفيف',
+            'نغمات زبدية',
+            'لمسة فانيلا',
+            'حلاوة بسيطة وأنيقة',
+            'دخان ناعم جداً وسلس'
+        ],
+        why: [
+            'من أكثر السيجارات نعومة في فئته',
+            'مناسب جداً للمبتدئين',
+            'طابع فرنسي أنيق يختلف عن السيجار الكوبي القوي المعتاد',
+            'سهل التدخين ومريح للحلق'
+        ],
+        forWho: [
+            'الصباح مع قهوة خفيفة',
+            'بعد الغداء',
+            'جلسات راقية وهادئة',
+            'مع قهوة لاتيه أو كابتشينو'
+        ],
+        intro: 'سيجار أنيق وناعم جداً، يعكس الطابع الفرنسي الراقي لعلامة Quai d\'Orsay.',
+        summary: 'الأناقة الهادئة: ناعم، نظيف، وفخم بدون أي حدة أو ثقل.'
+    },
+    'flor-cano': {
+        name: 'La Flor de Cano Robusto Ex. Países Bajos',
+        number: '31',
+        price: '78KD',
+        image: './La Flor de Cano Robusto ex. Países Bajos.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'La Flor de Cano',
+        size: 'Robusto',
+        ringGauge: '50',
+        length: '124 مم',
+        strength: 'خفيف إلى متوسط (Light – Medium)',
+        smokingTime: '45 – 60 دقيقة تقريباً',
+        flavors: [
+            'خشب أرز ناعم',
+            'كريمية خفيفة',
+            'نغمات عشبية لطيفة',
+            'لمسة عسل بسيطة',
+            'حلاوة متوازنة وغير ثقيلة',
+            'دخان ناعم وسلس جداً'
+        ],
+        why: [
+            'إصدار إقليمي محدود ونادر',
+            'قيمة عالية لهواة الجمع والاقتناء',
+            'طابع مختلف عن السيجارات الكوبية القوية التقليدية',
+            'سهل التدخين ومناسب لذائقة راقية'
+        ],
+        forWho: [
+            'الصباح المتأخر',
+            'بعد الغداء الخفيف',
+            'جلسات هادئة راقية',
+            'مع قهوة لاتيه أو كابتشينو'
+        ],
+        intro: 'سيجار حصري ونادر مخصص لسوق هولندا، ويعتبر قطعة مميزة لهواة الاقتناء وعشاق الإصدارات الخاصة.',
+        summary: 'الأناقة النادرة: إصدار محدود، ناعم بالطعم، وفخم بالقيمة والتميز.'
+    },
+    'larranaga': {
+        name: 'Por Larrañaga Prometidos Ex. Francia',
+        number: '32',
+        price: '78KD',
+        image: './Por Larranaga Prometidos ex. Francia.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Por Larrañaga',
+        size: 'Robusto',
+        ringGauge: '50 تقريباً',
+        length: '127 مم تقريباً',
+        strength: 'خفيف إلى متوسط (Light – Medium)',
+        smokingTime: '45 – 60 دقيقة تقريباً',
+        flavors: [
+            'كريمية ناعمة وواضحة',
+            'خشب أرز خفيف',
+            'نغمات عسل وزبدة',
+            'لمسة فانيلا بسيطة',
+            'حلاوة راقية ومتوازنة',
+            'دخان ناعم وسلس جداً'
+        ],
+        why: [
+            'إصدار إقليمي محدود مخصص للسوق الفرنسي',
+            'قيمة عالية لهواة الجمع والاقتناء',
+            'يعكس الطابع الكلاسيكي الراقي لـ Por Larrañaga',
+            'مناسب جداً للي يفضل السيجار الناعم والأنيق'
+        ],
+        forWho: [
+            'الصباح المتأخر',
+            'بعد الغداء الخفيف',
+            'جلسات راقية وهادئة',
+            'مع قهوة لاتيه أو كابتشينو'
+        ],
+        intro: 'سيجار نادر وأنيق من الإصدارات الإقليمية الخاصة بفرنسا، يجسد الطابع الكلاسيكي الناعم لعلامة Por Larrañaga مع لمسة فخامة أوروبية راقية.',
+        summary: 'الرقي الفرنسي الكوبي: ناعم، أنيق، ونادر بقيمته قبل طعمه.'
+    },
+    'protocolo': {
+        name: 'Protocolo Diplomáticos Ex. Rusia',
+        number: '33',
+        price: '126KD',
+        image: './Protocolo Diplomaticos ex. Rusia.png',
+        origin: 'كوبا 🇨🇺 Habanos',
+        brand: 'Protocolo',
+        size: 'Corona Extra',
+        ringGauge: '50 تقريباً',
+        length: '150 مم تقريباً',
+        strength: 'متوسطة (Medium)',
+        smokingTime: '70 – 90 دقيقة تقريباً',
+        flavors: [
+            'خشب أرز واضح',
+            'نغمات ترابية أنيقة',
+            'كريمية خفيفة',
+            'لمسة عسل بسيطة',
+            'توابل ناعمة في الخلفية',
+            'دخان متوازن وغني بدون حدة'
+        ],
+        why: [
+            'إصدار إقليمي محدود ونادر',
+            'مناسب لهواة الجمع والاقتناء',
+            'يعطي تجربة كوبيّة كلاسيكية راقية',
+            'طابع أنيق وفخم يناسب المناسبات الخاصة'
+        ],
+        forWho: [
+            'جلسات المساء الهادئة',
+            'بعد عشاء راقٍ',
+            'مع قهوة إسبريسو'
+        ],
+        intro: 'سيجار حصري ونادر مخصص للسوق الروسي، ويعتبر من الإصدارات الإقليمية المميزة لعشاق الاقتناء والتميز.',
+        summary: 'الفخامة الدبلوماسية: هادئ، راقٍ، ونادر بقيمته قبل نكهته.'
+    }
+
+};
+
+function ageUnder(){window.location.href='https://google.com'}
+
+function ageOver(){
+  document.getElementById('ageVerification').classList.add('hidden');
+  document.getElementById('mainContent').classList.add('visible')
+}
+
+function showProductDetails(productId) {
+    const product = productsData[productId];
+    if (!product) return;
+    
+    // Remplir le modal
+    document.getElementById('modalImage').src = product.image;
+    document.getElementById('modalTitle').textContent = product.name;
+    document.getElementById('modalPrice').textContent = product.price;
+    
+    // Créer le HTML des détails
+    const detailsHTML = `
+        ${product.intro ? `<div class="info-section">
+            <p style="font-size:1.15rem;line-height:1.9;color:#e0e0e0;font-style:italic;">${product.intro}</p>
+        </div>` : ''}
+        
+        <div class="info-section">
+            <h3>📋 المعلومات الأساسية</h3>
+            <p><strong>المنشأ:</strong> ${product.origin}</p>
+            <p><strong>الماركة:</strong> ${product.brand}</p>
+            <p><strong>الشكل:</strong> ${product.size}</p>
+            <p><strong>Ring Gauge:</strong> ${product.ringGauge}</p>
+            <p><strong>الطول:</strong> ${product.length}</p>
+            <p><strong>القوة:</strong> ${product.strength}</p>
+            ${product.smokingTime ? `<p><strong>مدة التدخين:</strong> ${product.smokingTime}</p>` : ''}
+        </div>
+        
+        <div class="info-section">
+            <h3>🍃 النكهات والطابع</h3>
+            <ul>
+                ${product.flavors.map(flavor => `<li>${flavor}</li>`).join('')}
+            </ul>
+        </div>
+        
+        <div class="info-section">
+            <h3>⭐ ليش مميز؟</h3>
+            <ul>
+                ${product.why.map(why => `<li>${why}</li>`).join('')}
+            </ul>
+        </div>
+        
+        <div class="info-section">
+            <h3>👤 مناسب لمن؟ ومتى؟</h3>
+            <ul>
+                ${product.forWho.map(who => `<li>${who}</li>`).join('')}
+            </ul>
+        </div>
+        
+        <div class="info-section" style="border-top:2px solid #ffffff;padding-top:1.5rem;margin-top:2rem;">
+            <p style="font-size:1.1rem;line-height:1.8;color:#e0e0e0;"><strong>بإختصار:</strong><br>${product.summary}</p>
+        </div>
+    `;
+    
+    document.getElementById('modalDetails').innerHTML = detailsHTML;
+    
+    // Stocker l'ID du produit pour la commande
+    document.getElementById('productModal').dataset.currentProduct = productId;
+    
+    // Afficher le modal
+    document.getElementById('productModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeProductDetails() {
+    document.getElementById('productModal').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function orderFromModal() {
+    const productId = document.getElementById('productModal').dataset.currentProduct;
+    const product = productsData[productId];
+    if (product) {
+        order(product.name, product.number);
+    }
+}
+
+function order(productName, cardNumber){
+  const phone = "96561119777";
+  const msg = `Hello, I would like to order:
+Product: ${productName},
+Card number: ${cardNumber}`;
+
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,"_blank");
+}
+
+// Fermer le modal en cliquant à l'extérieur
+document.getElementById('productModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeProductDetails();
+    }
+});
+
+window.addEventListener("scroll",()=>{
+  document.querySelector(".navbar").classList.toggle("scrolled",window.scrollY>50)
+});
+
+document.querySelector(".burger").onclick=()=>{
+  document.querySelector(".nav-menu").classList.toggle("active")
+};
+</script>
+
+</body>
+</html>
